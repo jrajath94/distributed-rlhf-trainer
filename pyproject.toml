@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "distributed-rlhf-trainer"
+version = "0.1.0"
+description = "Minimal distributed RLHF loop with clear separation of concerns — reward modeling, PPO policy optimization, and experience collection as independent, composable components"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Rajath John", email = "jrajath94@gmail.com"},
+]
+keywords = ["rlhf", "reinforcement-learning", "llm", "ppo", "distributed-training", "deepspeed", "ray"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "torch>=2.0.0",
+    "numpy>=1.24.0",
+    "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+distributed = [
+    "ray[default]>=2.9.0",
+    "deepspeed>=0.12.0",
+]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.21.0",
+    "ruff>=0.1.0",
+    "mypy>=1.5.0",
+]
+
+[project.scripts]
+rlhf-train = "distributed_rlhf_trainer.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/jrajath94/distributed-rlhf-trainer"
+Repository = "https://github.com/jrajath94/distributed-rlhf-trainer"
+Issues = "https://github.com/jrajath94/distributed-rlhf-trainer/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+asyncio_mode = "auto"
