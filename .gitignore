@@ -23,7 +23,9 @@ wheels/
 htmlcov/
 .mypy_cache/
 .ruff_cache/
+.venv/
 venv/
 ENV/
+env/
 docs/interview-prep.md
 social/
