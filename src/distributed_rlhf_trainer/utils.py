@@ -16,7 +16,7 @@ import numpy as np
 import torch
 
 from distributed_rlhf_trainer.exceptions import CheckpointError
-from distributed_rlhf_trainer.models import Experience, TrainingMetrics
+from distributed_rlhf_trainer.models import TrainingMetrics
 
 logger = logging.getLogger(__name__)
 

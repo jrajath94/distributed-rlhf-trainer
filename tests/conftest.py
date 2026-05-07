@@ -5,19 +5,17 @@ from __future__ import annotations
 import pytest
 import torch
 
+from distributed_rlhf_trainer.core import (
+    ExperienceCollector,
+    PolicyModel,
+    RewardModel,
+)
 from distributed_rlhf_trainer.models import (
+    Experience,
     PPOConfig,
     RewardModelConfig,
     RLHFConfig,
-    Experience,
 )
-from distributed_rlhf_trainer.core import (
-    PolicyModel,
-    RewardModel,
-    ExperienceCollector,
-    PPOTrainer,
-)
-
 
 VOCAB_SIZE = 100
 HIDDEN_DIM = 64

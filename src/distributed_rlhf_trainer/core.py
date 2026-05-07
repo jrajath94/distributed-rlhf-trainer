@@ -15,12 +15,11 @@ differentiates this project from monolithic RLHF implementations.
 from __future__ import annotations
 
 import logging
-from typing import Optional
 
 import numpy as np
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
+import torch.nn.functional as F  # noqa: N812
 
 from distributed_rlhf_trainer.exceptions import (
     ExperienceCollectionError,
@@ -626,7 +625,7 @@ class RLHFOrchestrator:
 
     def train(
         self,
-        num_iterations: Optional[int] = None,
+        num_iterations: int | None = None,
     ) -> list[TrainingMetrics]:
         """Run the full RLHF training loop.
 

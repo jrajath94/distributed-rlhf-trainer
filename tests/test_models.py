@@ -6,10 +6,10 @@ import pytest
 from pydantic import ValidationError
 
 from distributed_rlhf_trainer.models import (
+    Experience,
     PPOConfig,
     RewardModelConfig,
     RLHFConfig,
-    Experience,
     TrainingMetrics,
 )
 

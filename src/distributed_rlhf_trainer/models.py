@@ -12,8 +12,6 @@ from typing import Any
 
 from pydantic import BaseModel, Field, model_validator
 
-from distributed_rlhf_trainer.exceptions import ConfigValidationError
-
 logger = logging.getLogger(__name__)
 
 # ── Constants ──────────────────────────────────────────────────────────────────
@@ -102,7 +100,7 @@ class RLHFConfig(BaseModel):
     seed: int = 42
 
     @model_validator(mode="after")
-    def validate_dimensions(self) -> "RLHFConfig":
+    def validate_dimensions(self) -> RLHFConfig:
         """Ensure reward model hidden dim matches policy hidden dim."""
         if self.reward.hidden_dim != self.hidden_dim:
             logger.warning(
