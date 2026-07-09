@@ -119,7 +119,7 @@ How this project fits my story:
 
 - **JPMorgan (VP)** -> Built distributed systems at scale; this project applies the same decomposition principles to ML training infrastructure
 - **Goldman Sachs (Quant)** -> Understood reward shaping and policy optimization from a quant research perspective; RLHF is PPO applied to language
-- **NVIDIA** -> Deep understanding of GPU memory hierarchies and kernel optimization; the scaling strategy for this project leverages that knowledge
+- **NVIDIA** -> Deep understanding of GPU memory hierarchies and kernel optimization; the scaling strategy for this project uses that knowledge
 - **This project** -> Demonstrates ability to architect clean ML training systems, understand RLHF internals, and write production-quality code
 
 ## Interview Red Flags to Avoid
