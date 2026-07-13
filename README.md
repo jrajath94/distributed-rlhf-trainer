@@ -1,6 +1,6 @@
 # distributed-rlhf-trainer
 
-> Minimal distributed RLHF training loop in 3,000 lines -- four independent, testable components instead of one monolithic codebase
+> Minimal distributed RLHF training loop with four independent, testable components instead of one monolithic codebase
 
 [![CI](https://github.com/jrajath94/distributed-rlhf-trainer/actions/workflows/ci.yml/badge.svg)](https://github.com/jrajath94/distributed-rlhf-trainer/actions/workflows/ci.yml)
 [![Coverage](https://codecov.io/gh/jrajath94/distributed-rlhf-trainer/branch/main/graph/badge.svg)](https://codecov.io/gh/jrajath94/distributed-rlhf-trainer)
@@ -13,7 +13,7 @@ Almost every production RLHF implementation is monolithic and opaque. OpenAI doe
 
 RLHF has four conceptually simple steps: generate completions, score them, compute advantages, update the policy with PPO. But existing implementations couple these steps into a single monolithic loop. To parallelize generation, you fight TRL's abstraction layers. To use a custom reward model, you inherit their base class and override methods. To experiment with different PPO variants, you modify their source code. The whole thing is designed around a single way of doing RLHF, and deviating from that path is painful.
 
-I built a minimal RLHF trainer that separates these four concerns cleanly. Each component is independent, testable, and replaceable. The whole thing is 3,000 lines. You can read it in two hours, understand it fully, and modify any piece without touching the others. Generation can scale to dozens of Ray workers. Reward scoring is isolated so you can upgrade models without touching training code. PPO is standard PyTorch + DeepSpeed, so swapping optimization algorithms is a config change.
+I built a minimal RLHF trainer that separates these four concerns cleanly. Each component is independent, testable, and replaceable. You can read it fully and modify any piece without touching the others. Generation can scale to dozens of Ray workers. Reward scoring is isolated so you can upgrade models without touching training code. PPO is standard PyTorch + DeepSpeed, so swapping optimization algorithms is a config change.
 
 ## What This Project Does
 
@@ -75,31 +75,33 @@ policy = orchestrator.policy
 reward_model = orchestrator.reward_model
 ```
 
-## Key Results
+## Test Coverage
 
-### Training Performance
+- **38 tests** with **86% coverage** of core training components
+- Run with `make test`
 
-| Metric                 | Value | Unit        | Notes                                                |
-| ---------------------- | ----- | ----------- | ---------------------------------------------------- |
-| Collection throughput  | 3.9   | exp/sec     | Across all workers, avg completion length 128 tokens |
-| Collection p50 latency | 1,920 | ms          | Per batch                                            |
-| Collection p99 latency | 3,569 | ms          | Per batch                                            |
-| PPO update throughput  | 3.3   | updates/sec | Includes backward + optimizer step                   |
-| PPO update p50 latency | 300   | ms          | Batch size 32                                        |
-| PPO update p99 latency | 452   | ms          | Batch size 32                                        |
-| E2E iteration time     | 1,855 | ms          | Full collect + update cycle                          |
-| Test coverage          | 86    | %           | 38 tests passing                                     |
+## Performance Benchmarks
 
-### Comparison to Existing Frameworks
+Performance varies by hardware, dependencies, and configuration. Run local benchmarks with:
+
+```bash
+make bench
+```
+
+This measures:
+- Experience collection throughput (experiences/sec)
+- PPO update throughput (updates/sec)
+- End-to-end iteration latency
+- Memory usage
+
+## Comparison to Existing Frameworks
 
 | Feature                | This Trainer           | TRL                     | DeepSpeed-Chat     |
 | ---------------------- | ---------------------- | ----------------------- | ------------------ |
-| Lines of code          | 3,000                  | 17,000+                 | 12,000+            |
 | Custom reward models   | Drop-in (any callable) | Inherit base class      | Tightly coupled    |
 | Distributed generation | Ray actors (any scale) | Single process          | DeepSpeed only     |
 | PPO variants           | Swap optimizer + loss  | Modify source           | Modify source      |
 | Debug experience       | 3 files, clear flow    | Multi-layer inheritance | Engine abstraction |
-| Time to understand     | 2 hours                | 2 days                  | 1 day              |
 
 ## Design Decisions
 
